@@ -15,6 +15,61 @@ class App extends React.Component {
     }
   }
 
+  onFindPetsClick = () => {
+      this.setState({ pets: [] })
+
+      if(this.state.filters.type === 'all') {
+          fetch('/api/pets')
+          .then(r=> r.json())
+          .then(r=> {
+              this.setState({
+                  pets: r
+              })
+          })
+      } else {
+          fetch(`/api/pets?type=${this.state.filters.type}`)
+          .then(r=> r.json())
+          .then(r=> {
+              this.setState({
+                  pets: r
+              })
+          })
+      }
+
+  }
+
+  handleChange = (event) => {
+      this.setState({
+          pets: [],
+          filters: {type: event.target.value},
+      })
+  }
+
+  handleAdopt = (id) => {
+      // -----> USING IF STATEMENT
+      const updatedPetsArray = this.state.pets.map(pet =>
+          { if (pet.id === id) {
+              pet.isAdopted = true
+          }
+
+          return pet
+      })
+      this.setState({ pets: updatedPetsArray })
+
+      // -----> USING TERNARY OPERATOR
+      // const pets = this.state.pets.map(pet => {
+      //     return pet.id === id ? {...pet, isAdopted: true} : pet
+      // })
+      // this.setState({ pets })
+
+      // -----> USING PATCH REQUEST
+      // fetch(`/api/pets?type=${this.state.filters.type}/${id}`, {
+      //     method: 'PATCH',
+      //     body: JSON.stringify({isAdopted: true})
+      // })
+      // .then(r=> fetch(`/api/pets?type=${this.state.filters.type}`))
+  }
+
   render() {
     return (
       <div className="ui container">
@@ -24,10 +79,10 @@ class App extends React.Component {
         <div className="ui container">
           <div className="ui grid">
             <div className="four wide column">
-              <Filters />
+              <Filters onChangeType={this.handleChange} onFindPetsClick={this.onFindPetsClick}/>
             </div>
             <div className="twelve wide column">
-              <PetBrowser />
+              <PetBrowser pets={this.state.pets} onAdoptPet={this.handleAdopt}/>
             </div>
           </div>
         </div>
