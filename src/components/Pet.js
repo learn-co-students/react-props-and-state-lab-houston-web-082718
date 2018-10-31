@@ -1,8 +1,11 @@
-import React from 'react'
+import React from "react";
 
 class Pet extends React.Component {
   render() {
     return (
+      // this.props.pets.forEach(element => {
+
+      // })
       <div className="card">
         <div className="content">
           <a className="header">
@@ -22,8 +25,8 @@ class Pet extends React.Component {
           <button className="ui primary button">Adopt pet</button>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Pet
+export default Pet;
