@@ -20,12 +20,16 @@ class App extends React.Component {
     let endpoint = "/api/pets";
 
     if (this.state.filters.type !== "all") {
-      endpoint += "?type=${this.state.filters.type}";
+      endpoint += `?type=${this.state.filters.type}`;
     }
 
     fetch(endpoint)
       .then(resp => resp.json())
-      .then(pets => this.setState({ pets }, () => console.log("===>", pets)));
+      .then(pets =>
+        this.setState({ pets }, () =>
+          console.log("==returnFilteredPets==>", pets)
+        )
+      );
   };
 
   onChangeType = event => {
@@ -34,7 +38,7 @@ class App extends React.Component {
     this.setState(
       {
         filters: {
-          ...this.state.filters.filters,
+          ...this.state.filters,
           type: event.target.value
         }
       },
@@ -44,6 +48,7 @@ class App extends React.Component {
 
   onAdoptPet = petId => {
     //Write pet adoption code here
+    console.log("===> onAdoptPet fired");
     const pets = this.state.pets.map(pet => {
       if (pet.id === petId) {
         return { ...pet, isAdopted: true };
@@ -67,7 +72,7 @@ class App extends React.Component {
             <div className="four wide column">
               <Filters
                 onChangeType={this.onChangeType}
-                onFinderClick={this.fetchPets}
+                onFindPetsClick={this.fetchPets}
               />
             </div>
             <div className="twelve wide column">
